@@ -887,3 +887,23 @@ def BiclosedSets(G):
             BS.append(S)
     return Poset((BS,lambda p,q:p.issubset(q)))
                 
+def poset_is_meetsemidistributive(P):
+    """
+    Vérifie si la complétion d'un poset est meet-semidistributive
+    """
+    for x in P:
+        Z = []
+        for z in P:
+            if not P.is_lequal(x,z):
+                s = True
+                for y in P:
+                    if not P.is_lequal(y,z) and P.is_less_than(y,x):
+                        s = False
+                        break
+                if s:
+                    Z.append(z)
+        if len(Z) > 0:
+            Z = P.subposet(Z)
+            if len(Z.maximal_elements()) > 1:
+                return False
+    return True
