@@ -32,23 +32,25 @@ def left_orthogonal(G,X):
 #    return LatticePoset(([s for s in Subsets(G) if Set(left_orthogonal(G,right_orthogonal(G,s)))==s],lambda p,q:p.issubset(q)))
 
 #plus performant
-def MOPLattice(G,lattice = True):
-    LS = [set()]
-    L = LS
+def MOPLattice(G, lattice = True):
+    LS = [Set()]
+    L = {}
     while LS!=[]:
         L2 = []
         for s in LS:
+            cov = []
             for x in G:
                 if x not in s:
-                    s2 = s.copy()
-                    s2.add(x)
-                    t = set(left_orthogonal(G,right_orthogonal(G,s2)))
-                    if t not in L and t not in L2:
+                    s2 = list(s)
+                    s2.append(x)
+                    t = Set(left_orthogonal(G,right_orthogonal(G,s2)))
+                    if t not in L and t not in L2 and t not in L2:
                         L2.append(t)
+                    cov.append(t)
+            L[s] = cov
         LS = L2
-        L.extend(LS)
     if lattice:
-        return LatticePoset(([Set(x) for x in L],lambda p,q:p.issubset(q)))
+        return LatticePoset(L)
     return L
 
 def OPLattice(G,lattice = True):
