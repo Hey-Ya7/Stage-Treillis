@@ -3,11 +3,22 @@ def JoinKMap(L):
     K = {}
     for i in L.join_irreducibles():
         i2 = L.lower_covers(i)[0]
-        k = L.join([j for j in L if L.meet(j,i)==i2])
-        if L.meet(k,i)!=i2:
+        k = L.join([j for j in L if L.meet(j, i) == i2])
+        if L.meet(k, i) != i2:
             raise Exception("L n'est pas meet-semidistributif")
         K[i] = k
     return K
+
+def JoinKappa(L, j):
+    assert j in L.join_irreducibles()
+    js = L.lower_covers(j)[0]
+    while true:
+        if L.is_lequal(j, L.upper_covers(js)[0]):
+            if len(L.upper_covers(js)) == 1:
+                return js
+            js = L.upper_covers(js)[1]
+        else:
+            js = L.upper_covers(js)[0]
 
 def SDLGraph(L):
     K = JoinKMap(L)
@@ -887,23 +898,3 @@ def BiclosedSets(G):
             BS.append(S)
     return Poset((BS,lambda p,q:p.issubset(q)))
                 
-def poset_is_meetsemidistributive(P):
-    """
-    Vérifie si la complétion d'un poset est meet-semidistributive
-    """
-    for x in P:
-        Z = []
-        for z in P:
-            if not P.is_lequal(x,z):
-                s = True
-                for y in P:
-                    if not P.is_lequal(y,z) and P.is_less_than(y,x):
-                        s = False
-                        break
-                if s:
-                    Z.append(z)
-        if len(Z) > 0:
-            Z = P.subposet(Z)
-            if len(Z.maximal_elements()) > 1:
-                return False
-    return True
