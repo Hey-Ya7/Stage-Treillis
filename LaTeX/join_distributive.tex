@@ -1,0 +1,124 @@
+\PassOptionsToPackage{colorlinks,citecolor=blue}{hyperref}
+\documentclass[a4paper]{amsart}
+\usepackage[a4paper, left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+
+\usepackage{graphicx, float, enumerate, amsmath, amsfonts, amssymb, amsthm, xcolor, url, hyperref, multicol, accents,footnote}
+\usepackage[french]{babel}
+
+% \usepackage{enumerate, amsmath, amsfonts, amssymb, amsthm, wasysym, graphics, graphicx, xcolor, url, hyperref, hypcap, a4wide, stmaryrd, shuffle, xargs, multicol, overpic, pdflscape, multirow, hvfloat, minibox, accents, etoolbox, dsfont}
+
+\makeatletter
+% we use \prefix@<level> only if it is defined
+\renewcommand{\@seccntformat}[1]{%
+  \ifcsname prefix@#1\endcsname
+    \csname prefix@#1\endcsname
+  \else
+    \csname the#1\endcsname\quad
+  \fi}
+% define \prefix@section
+\newcommand\prefix@section{\thesection}
+\makeatother
+
+\renewcommand{\thesection}{}
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+\newcommand{\blue}{blue!65!white}
+\newcommand{\mydef}[1]{\textcolor{\blue}{{\bf #1}}} % blue bold definition
+% % \newcommand{\mydef}[1]{{\bf #1}} % bold definition
+
+
+\title{Treillis join-distributifs}
+
+
+\addto\captionsfrench{% Replace "english" with the language you use
+  \renewcommand{\contentsname}%
+    {Contenu du document}%
+}
+
+\newtheorem{lem}{Lemme}
+\newtheorem{theo}{Théorème}
+\newtheorem{defi}{Définition}
+\newtheorem{prop}{Proposition}
+\newtheorem{conj}{Conjecture}
+\newtheorem{rmk}{Remarque}
+
+\newcommand{\dps}{\displaystyle}
+\renewcommand{\L}{\mathbf L}
+\renewcommand{\P}{\mathcal P}
+\newcommand{\InfPP}{\mathcal Y_{\infty}}
+\newcommand{\ChainP}{\mathcal C}
+\newcommand{\LS}{\downarrow \!}
+\newcommand{\US}{\uparrow \!}
+\newcommand{\Pos}{\mathcal P}
+\newcommand{\Anti}{\operatorname{Anti}}
+\newcommand{\Dyck}{\mathbf{Dyck}}
+\newcommand{\Motz}{\mathbf{Motz}}
+\newcommand{\Schr}{\mathbf{Schr}}
+\newcommand{\MD}{\mathbf{MD}}
+\newcommand{\CS}{\operatorname{CS}}
+\newcommand{\stand}{\operatorname{St}}
+\newcommand{\Ss}{\mathfrak{S}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Irr}{\operatorname{Irr}}
+\newcommand{\JIrr}{\mathcal J}
+\newcommand{\MIrr}{\mathcal M}
+\newcommand{\IdL}{\mathbf{Low}}
+\newcommand{\Dis}{\operatorname{Dis}}
+\newcommand{\Con}{\operatorname{Con}}
+\newcommand{\AD}{\operatorname{AscDes}}
+\newcommand{\Dec}{\operatorname{Dec}}
+
+
+\begin{document}
+\maketitle
+
+
+
+Littérature : Coordinatization of join-distributive lattices, Gábor Czédli
+
+\begin{theo}
+   Un treillis fini est géométrique si et seulement si il est isomorphe au treillis des ensembles fermés d'une clôture d'échange.
+\end{theo}
+
+\begin{theo}
+   Soit $\L$ un treillis fini. Les assertions suivantes sont équivalentes :
+   \begin{enumerate}
+   \item \label{item:1} Tout intervalle atomique de $\L$ est booléen ;
+   \item \label{item:2} Tout élément de $\L$ s'écrit de manière unique comme le \emph{meet} d'une antichaîne d'éléments \emph{meet}-irréductibles ;
+   \item \label{item:3} $\L$ est semimodulaire supérieur et \emph{meet}-semidistributif ;
+   \item \label{item:4} toutes les chaînes maximales de $\L$ ont pour longueur $|\MIrr(\L)|$ ;
+   \item \label{item:5} $\L$ est un \emph{join}-sous-semitreillis d'un treillis distributif fini ;
+   \item \label{item:6} $\L$ est isomorphe au treillis des ouverts d'une clôture d'antiéchange (ou antimatroïde).
+   \end{enumerate}
+\end{theo}
+
+Un treillis qui vérifie ces propriétés est dit \emph{join}-distributif. Un treillis dont le dual est \emph{join}-distributif est dit \emph{meet}-distributif.
+
+Un treillis \emph{join}-distributif étant \emph{meet}-semidistributif, $\L$ est gradué de hauteur $|\MIrr(\L)|$. Il possède une application $\kappa:\JIrr(\Pos)\to \MIrr(\Pos)$ définie par $\kappa(j)=\max\{x\in \L:x\wedge j=j_*\}$.
+
+
+\begin{prop}
+Soit $\Pos$ un poset fini, $n\in \N$ et $\lambda :\Pos \to \{1,...,n\}$ un étiquetage de $\Pos$.
+$\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion est un treillis \emph{join}-distributif.
+\end{prop}
+\begin{proof}
+  $\IdL(\Pos,\lambda)$ est stable par union donc c'est un \emph{join}-semitreillis, et il possède un plus grand élément $\lambda(\Pos)$, c'est donc un treillis~\cite[Proposition 3.3.1]{Stan12}. Les relations de couvertures de $\IdL(\Pos,\lambda)$ sont de la forme $\lambda(X)\lessdot \lambda(X)\cup\{k\}$, et comme le \emph{join} dans $\IdL(\Pos,\lambda)$ est l'union d'ensembles on en déduit que ses intervalles atomiques sont tous booléens.
+  %Soit $X\in \IdL(\Pos)$ et $k_1,\dots,k_r$ tels que $\lambda(X)\cup\{k_1\}, \dots \lambda(X)\cup\{k_r\}$ couvrent $\lambda(X)$ dans $\IdL(\Pos,\lambda)$.
+\end{proof}
+
+\begin{prop}
+   Soit $\Pos$ un poset fini. $\MD(P)$ est \emph{join}-distributif si et seulement si $(\min \{x:x\nleq m\})_{m\in \MIrr(P)}$ est une partition de $\JIrr(\Pos)$.
+\end{prop}
+
+\section{Treillis \emph{join}-distributifs semi-infinis}
+
+Treillis des multipartitions (Izumi Watanabe)
+
+Étendre les résultats de représentation, complétion des treillis join-distributifs aux treillis semi-infinis.
+
+Citer AN EXTENSION OF BIRKHOFF’S REPRESENTATION THEOREM TO INFINITE DISTRIBUTIVE LATTICES
+DALE R. WORLEY
+
+
+\end{document}
