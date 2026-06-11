@@ -1,0 +1,69 @@
+##### TREILLIS DISTRIBUTIFS #####
+
+# Treillis des matrices à signes alternants
+
+L = LatticePoset((AlternatingSignMatrices(5), lambda p,q: all(i<=j for l,m in zip(p.to_monotone_triangle(),q.to_monotone_triangle()) for i,j in zip(l,m))))
+
+##### TREILLIS SEMIDISTRIBUTIFS & EXTREMAUX #####
+
+# Treillis de Tamari
+
+L = posets.TamariLattice(5)
+
+# Intervalles de Tamari
+
+L2 = LatticePoset(L.intervals_poset()).canonical_label()
+
+# Treillis cambriens (cf. Nathan Reading, Cambrian Lattices)
+
+W = CoxeterGroup(['A',3])
+C = list(W.standard_coxeter_elements())
+L = W.cambrian_lattice(C[3])
+
+
+# Chute move lattices (cf. Chute Move Posets are Lattices)
+
+def MinPipeDream(p):
+    n = len(p)
+    P = [k*[0] for k in range(1,n+1)]
+    for i in range(n):
+        s = sum(1 for k in p[i+1:] if k<p[i])
+        for j in range(i,n-s):
+            P[j][i] = 1
+    return P    
+
+def ChutePoset(p):
+    n = len(p)
+    P = tuple(tuple(l) for l in MinPipeDream(p))
+    D = {}
+    L = [P]
+    while len(L)>0:
+        L2 = []
+        for P in L:
+            lp = []
+            for x0 in range(1,n-1):
+                for x1 in range(x0+1,n):
+                    for y0 in range(x0):
+                        for y1 in range(y0+1,x0+1):
+                            if all((P[i][j]==0 or (i,j) in [(x0,y0),(x1,y0),(x0,y1)]) and (P[i][j]==1 or (i,j) not in [(x0,y0),(x1,y0),(x0,y1)]) for i in range(x0,x1+1) for j in range(y0,y1+1)):
+                                P2 = list(list(l) for l in P)
+                                P2[x0][y0] = 0
+                                P2[x1][y1] = 1
+                                P2 = tuple(tuple(l) for l in P2)
+                                lp.append(P2)
+                                if P2 not in D and P2 not in L2:
+                                    L2.append(P2)
+            D[P] = lp
+        L = L2
+    return D
+P = LatticePoset(ChutePoset([1,4,2,5,7,3,6]))
+
+##### TREILLIS SEMIDISTRIBUTIFS #####
+
+# Ordre faible (cf. Anders Björner and Francesco Brentin Combinatorics of Coxeter Groups)
+
+L = LatticePoset((Permutations(4),lambda p,q:p.permutohedron_lequal(q)))
+
+W = WeylGroup(['B',3])
+L = LatticePoset((W, lambda p,q: p.weak_le(q)))
+
