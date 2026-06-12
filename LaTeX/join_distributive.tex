@@ -1,4 +1,3 @@
-\PassOptionsToPackage{colorlinks,citecolor=blue}{hyperref}
 \documentclass[a4paper]{amsart}
 \usepackage[a4paper, left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
 
@@ -69,17 +68,15 @@
 \newcommand{\AD}{\operatorname{AscDes}}
 \newcommand{\Dec}{\operatorname{Dec}}
 
+\newcommand{\labels}{\Lambda}
+
 
 \begin{document}
 \maketitle
 
+\section{Introduction}
 
-
-Littérature : Coordinatization of join-distributive lattices, Gábor Czédli
-
-\begin{theo}
-   Un treillis fini est géométrique si et seulement si il est isomorphe au treillis des ensembles fermés d'une clôture d'échange.
-\end{theo}
+Citer \cite{AFN22} \cite{Czed14} \cite{Arm09}
 
 \begin{theo}
    Soit $\L$ un treillis fini. Les assertions suivantes sont équivalentes :
@@ -89,7 +86,7 @@ Littérature : Coordinatization of join-distributive lattices, Gábor Czédli
    \item \label{item:3} $\L$ est semimodulaire supérieur et \emph{meet}-semidistributif ;
    \item \label{item:4} toutes les chaînes maximales de $\L$ ont pour longueur $|\MIrr(\L)|$ ;
    \item \label{item:5} $\L$ est un \emph{join}-sous-semitreillis d'un treillis distributif fini ;
-   \item \label{item:6} $\L$ est isomorphe au treillis des ouverts d'une clôture d'antiéchange (ou antimatroïde).
+   \item \label{item:6} $\L$ est isomorphe au treillis des ouverts d'une clôture d'antiéchange (ou antimatroïde, ou géométrie convexe).
    \end{enumerate}
 \end{theo}
 
@@ -97,6 +94,12 @@ Un treillis qui vérifie ces propriétés est dit \emph{join}-distributif. Un tr
 
 Un treillis \emph{join}-distributif étant \emph{meet}-semidistributif, $\L$ est gradué de hauteur $|\MIrr(\L)|$. Il possède une application $\kappa:\JIrr(\Pos)\to \MIrr(\Pos)$ définie par $\kappa(j)=\max\{x\in \L:x\wedge j=j_*\}$.
 
+L'assertion (\ref{item:6}) est analogue au résultat suivant :
+\begin{rmk}
+Un treillis fini est géométrique si et seulement si il est isomorphe au treillis des ensembles fermés d'une clôture d'échange.
+\end{rmk}
+
+\section{Premiers résultats}
 
 \begin{prop}
 Soit $\Pos$ un poset fini, $n\in \N$ et $\lambda :\Pos \to \{1,...,n\}$ un étiquetage de $\Pos$.
@@ -108,6 +111,14 @@ $\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion es
 \end{proof}
 
 \begin{prop}
+   Soit $\L$ un treillis \emph{meet}-semidistributif fini. Pour tout $x\in \L$, on définit $\labels(x):=\{\kappa(j):j\in \JIrr(\L), j\le x\}$. $\labels(x)$ caractérise $x$, $x$ étant l'unique élément minimal de $\L\setminus \bigcup_{m\in \labels(x)} [\le m]$.
+\end{prop}
+
+\begin{prop}
+  Soit $\L$ un treillis \emph{join}-distributif fini. $\L$ est isomorphe à $\IdL(\JIrr(\L),\kappa)$.
+\end{prop}
+
+\begin{prop}
    Soit $\Pos$ un poset fini. $\MD(P)$ est \emph{join}-distributif si et seulement si $(\min \{x:x\nleq m\})_{m\in \MIrr(P)}$ est une partition de $\JIrr(\Pos)$.
 \end{prop}
 
@@ -117,8 +128,7 @@ Treillis des multipartitions (Izumi Watanabe)
 
 Étendre les résultats de représentation, complétion des treillis join-distributifs aux treillis semi-infinis.
 
-Citer AN EXTENSION OF BIRKHOFF’S REPRESENTATION THEOREM TO INFINITE DISTRIBUTIVE LATTICES
-DALE R. WORLEY
+Voir "An extension of Birkhoff's representation theorem to locally-finite distributive lattices" \cite{Worl26}
 
 \bibliography{lattices}{}
 \bibliographystyle{plain}
