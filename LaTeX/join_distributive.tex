@@ -110,6 +110,16 @@ $\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion es
   %Soit $X\in \IdL(\Pos)$ et $k_1,\dots,k_r$ tels que $\lambda(X)\cup\{k_1\}, \dots \lambda(X)\cup\{k_r\}$ couvrent $\lambda(X)$ dans $\IdL(\Pos,\lambda)$.
 \end{proof}
 
+L'application $\lambda :\IdL(\Pos):=\IdL(\Pos, \lambda)$ est un morphisme de \emph{join}-semitreillis : $\lambda(X)\cup\lambda(Y)=\lambda (X\cup Y)$. On en déduit le résultat suivant :
+\begin{prop}
+   Pour tout $j\in \JIrr(\IdL(\Pos, \lambda))$, les éléments minimaux de $\lambda^{-1}(j)$ appartiennent à $\JIrr(\IdL(\Pos))$, \emph{i.e.} ce sont des idéaux principaux de $\Pos$.
+   \label{prop:2}
+\end{prop}
+\begin{proof}
+   Supposons que $x$ soit minimal dans $\lambda^{-1}(j)$ sans être \emph{join}-irréductible. Il existe donc $y$ et $z$ couverts par $x$ dans $\IdL(\Pos)$ tels que $\lambda(y)$ et $\lambda(z)$ sont différents de $j$. Or $j=\lambda(x)= \lambda(y\cup z)=\lambda(y)\cup \lambda(z)$, et comme $j$ est \emph{join}-irréductible, $\lambda(y)$ ou $\lambda(z)$ doit être égal à $j$.
+\end{proof}
+
+
 \begin{prop}
    Soit $\L$ un treillis \emph{meet}-semidistributif fini. Pour tout $x\in \L$, on définit $\labels(x):=\{\kappa(j):j\in \JIrr(\L), j\le x\}$. $\labels(x)$ caractérise $x$, $x$ étant l'unique élément minimal de $\L\setminus \bigcup_{m\in \labels(x)} [\le m]$.
 \end{prop}
@@ -117,6 +127,18 @@ $\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion es
 \begin{prop}
   Soit $\L$ un treillis \emph{join}-distributif fini. $\L$ est isomorphe à $\IdL(\JIrr(\L),\kappa)$.
 \end{prop}
+
+\begin{lem}
+   Soit $x<y$ dans $\Pos$ tel que $\lambda(x)=\lambda(y)$. Il existe $z\in \Pos$ tel que $\lambda([\le z])=\lambda([\le y])$, ou alors $\lambda([\le y])$ n'est pas \emph{join}-irréductible dans $\IdL(\Pos,\lambda)$.
+\end{lem}
+\begin{proof}
+   Si $x<y$ dans $\Pos$ avec $\lambda(x)=\lambda(y)$, alors $\lambda([< y])=\lambda([\le y])$. D'après la Proposition \ref{prop:2}, il existe un idéal principal $[\le z]$ strictement inclus dans $[\le y]$ tel que $\lambda([\le z])=\lambda([\le y])$, ou alors $\lambda([\le y])$ ne serait pas \emph{join}-irréductible.
+\end{proof}
+
+Tout treillis \emph{join}-distributif $\L$ peut s'obtenir à partir d'un poset étiqueté avec autant d'éléments qu'il y a de \emph{join}-irréductibles dans $\L$. À quel condition un poset étiqueté $(\Pos,\lambda)$ est de cette forme ? Autrement dit, on veut que les $\lambda([\le x])$ soit tous distincts et \emph{join}-irréductibles dans $\IdL(\Pos, \lambda)$.
+
+
+\subsection{Complétion}
 
 \begin{prop}
    Soit $\Pos$ un poset fini. $\MD(P)$ est \emph{join}-distributif si et seulement si $(\min \{x:x\nleq m\})_{m\in \MIrr(P)}$ est une partition de $\JIrr(\Pos)$.
