@@ -1,29 +1,31 @@
-\documentclass[a4paper]{amsart}
-\usepackage[a4paper, left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+\documentclass[leqno, 12pt]{amsart}
 
-\usepackage{graphicx, float, enumerate, amsmath, amsfonts, amssymb, amsthm, xcolor, url, hyperref, multicol, accents,footnote}
+\usepackage{seqsplit}
 \usepackage[french]{babel}
 
-% \usepackage{enumerate, amsmath, amsfonts, amssymb, amsthm, wasysym, graphics, graphicx, xcolor, url, hyperref, hypcap, a4wide, stmaryrd, shuffle, xargs, multicol, overpic, pdflscape, multirow, hvfloat, minibox, accents, etoolbox, dsfont}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
 
-\makeatletter
-% we use \prefix@<level> only if it is defined
-\renewcommand{\@seccntformat}[1]{%
-  \ifcsname prefix@#1\endcsname
-    \csname prefix@#1\endcsname
-  \else
-    \csname the#1\endcsname\quad
-  \fi}
-% define \prefix@section
-\newcommand\prefix@section{\thesection}
-\makeatother
+\geometry{hmargin=2cm,vmargin=2cm}
+\usepackage{lineno}
 
-\renewcommand{\thesection}{}
-\renewcommand{\thesubsection}{\arabic{subsection}}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
 
-\newcommand{\blue}{blue!65!white}
-\newcommand{\mydef}[1]{\textcolor{\blue}{{\bf #1}}} % blue bold definition
-% % \newcommand{\mydef}[1]{{\bf #1}} % bold definition
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage{color}
+\definecolor{darkblue}{rgb}{0,0,0.7} % darkblue color
+\newcommand{\darkblue}{\color{darkblue}} % darkblue command
+\newcommand{\defn}[1]{\textsl{\darkblue #1}} % emphasis of a definition
 
 
 \title{Treillis join-distributifs}
@@ -34,12 +36,14 @@
     {Contenu du document}%
 }
 
-\newtheorem{lem}{Lemme}
-\newtheorem{theo}{Théorème}
-\newtheorem{defi}{Définition}
-\newtheorem{prop}{Proposition}
-\newtheorem{conj}{Conjecture}
-\newtheorem{rmk}{Remarque}
+\numberwithin{equation}{section}
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{defi}[thm]{Définition}
+\newtheorem{cnj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollaire}
+\newtheorem{rmk}[thm]{Remarque}
 
 \newcommand{\dps}{\displaystyle}
 \renewcommand{\L}{\mathbf L}
@@ -74,11 +78,16 @@
 \begin{document}
 \maketitle
 
+\tableofcontents
+
 \section{Introduction}
 
 Citer \cite{AFN22} \cite{Czed14} \cite{Arm09}
 
-\begin{theo}
+\section{Notations et préliminaires}
+
+
+\begin{thm}
    Soit $\L$ un treillis fini. Les assertions suivantes sont équivalentes :
    \begin{enumerate}
    \item \label{item:1} Tout intervalle atomique de $\L$ est booléen ;
@@ -88,19 +97,20 @@ Citer \cite{AFN22} \cite{Czed14} \cite{Arm09}
    \item \label{item:5} $\L$ est un \emph{join}-sous-semitreillis d'un treillis distributif fini ;
    \item \label{item:6} $\L$ est isomorphe au treillis des ouverts d'une clôture d'antiéchange (ou antimatroïde, ou géométrie convexe).
    \end{enumerate}
-\end{theo}
+\end{thm}
 
-Un treillis qui vérifie ces propriétés est dit \emph{join}-distributif. Un treillis dont le dual est \emph{join}-distributif est dit \emph{meet}-distributif.
+Un treillis qui vérifie ces propriétés est dit \defn{\emph{join}-distributif}. Un treillis dont le dual est \defn{\emph{join}-distributif }est dit \emph{meet}-distributif.
 
-Un treillis \emph{join}-distributif étant \emph{meet}-semidistributif, $\L$ est gradué de hauteur $|\MIrr(\L)|$. Il possède une application $\kappa:\JIrr(\Pos)\to \MIrr(\Pos)$ définie par $\kappa(j)=\max\{x\in \L:x\wedge j=j_*\}$.
+Un treillis \emph{join}-distributif étant \emph{meet}-semidistributif, $\L$ est gradué de hauteur $|\MIrr(\L)|$. Il possède une surjection $\kappa:\JIrr(\Pos)\to \MIrr(\Pos)$ définie par $\kappa(j)=\max\{x\in \L:x\wedge j=j_*\}$.
 
 L'assertion (\ref{item:6}) est analogue au résultat suivant :
 \begin{rmk}
-Un treillis fini est géométrique si et seulement si il est isomorphe au treillis des ensembles fermés d'une clôture d'échange.
+Un treillis fini est géométrique si et seulement si il est isomorphe au treillis des ensembles fermés d'une clôture d'échange (treillis des fermés d'un matroïde).
 \end{rmk}
 
 \section{Premiers résultats}
-
+\subsection{Définition de $\IdL(\Pos,\lambda)$}
+\label{sec:def_low}
 \begin{prop}
 Soit $\Pos$ un poset fini, $n\in \N$ et $\lambda :\Pos \to \{1,...,n\}$ un étiquetage de $\Pos$.
 $\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion est un treillis \emph{join}-distributif.
@@ -109,8 +119,8 @@ $\IdL(\Pos,\lambda):=\{\lambda(X):X\in \IdL(\Pos)\}$ ordonné par l'inclusion es
   $\IdL(\Pos,\lambda)$ est stable par union donc c'est un \emph{join}-semitreillis, et il possède un plus grand élément $\lambda(\Pos)$, c'est donc un treillis~\cite[Proposition 3.3.1]{Stan12}. Les relations de couvertures de $\IdL(\Pos,\lambda)$ sont de la forme $\lambda(X)\lessdot \lambda(X)\cup\{k\}$, et comme le \emph{join} dans $\IdL(\Pos,\lambda)$ est l'union d'ensembles on en déduit que ses intervalles atomiques sont tous booléens.
   %Soit $X\in \IdL(\Pos)$ et $k_1,\dots,k_r$ tels que $\lambda(X)\cup\{k_1\}, \dots \lambda(X)\cup\{k_r\}$ couvrent $\lambda(X)$ dans $\IdL(\Pos,\lambda)$.
 \end{proof}
-
-L'application $\lambda :\IdL(\Pos):=\IdL(\Pos, \lambda)$ est un morphisme de \emph{join}-semitreillis : $\lambda(X)\cup\lambda(Y)=\lambda (X\cup Y)$. On en déduit le résultat suivant :
+Si $\lambda$ est injective, on a $\IdL(\Pos, \lambda)\cong \IdL(\Pos)$.
+L'application $\lambda :\IdL(\Pos)\to\IdL(\Pos, \lambda)$ est un morphisme de \emph{join}-semitreillis, puisque $\lambda(X)\cup\lambda(Y)=\lambda (X\cup Y)$. On en déduit le résultat suivant :
 \begin{prop}
    Pour tout $j\in \JIrr(\IdL(\Pos, \lambda))$, les éléments minimaux de $\lambda^{-1}(j)$ appartiennent à $\JIrr(\IdL(\Pos))$, \emph{i.e.} ce sont des idéaux principaux de $\Pos$.
    \label{prop:2}
@@ -119,7 +129,8 @@ L'application $\lambda :\IdL(\Pos):=\IdL(\Pos, \lambda)$ est un morphisme de \em
    Supposons que $x$ soit minimal dans $\lambda^{-1}(j)$ sans être \emph{join}-irréductible. Il existe donc $y$ et $z$ couverts par $x$ dans $\IdL(\Pos)$ tels que $\lambda(y)$ et $\lambda(z)$ sont différents de $j$. Or $j=\lambda(x)= \lambda(y\cup z)=\lambda(y)\cup \lambda(z)$, et comme $j$ est \emph{join}-irréductible, $\lambda(y)$ ou $\lambda(z)$ doit être égal à $j$.
 \end{proof}
 
-
+\subsection{Représentation des treillis \emph{join}-distributifs finis}
+\label{sec:repr_join_dis}
 \begin{prop}
    Soit $\L$ un treillis \emph{meet}-semidistributif fini. Pour tout $x\in \L$, on définit $\labels(x):=\{\kappa(j):j\in \JIrr(\L), j\le x\}$. $\labels(x)$ caractérise $x$, $x$ étant l'unique élément minimal de $\L\setminus \bigcup_{m\in \labels(x)} [\le m]$.
 \end{prop}
@@ -128,15 +139,65 @@ L'application $\lambda :\IdL(\Pos):=\IdL(\Pos, \lambda)$ est un morphisme de \em
   Soit $\L$ un treillis \emph{join}-distributif fini. $\L$ est isomorphe à $\IdL(\JIrr(\L),\kappa)$.
 \end{prop}
 
+\subsection{Étiquetages minimaux}
+\label{sec:min_label}
+Dans la section \ref{sec:def_low}, on a vu que tout étiquetage d'un poset fini donne un treillis \emph{join}-distributif avec au plus autant de \emph{join}-irréductibles qu'il y a d'éléments dans $\Pos$.
+Dans la section \ref{sec:repr_join_dis}, on a montré que tout treillis \emph{join}-distributif $\L$ peut s'obtenir à partir d'un poset étiqueté avec autant d'éléments qu'il y a de \emph{join}-irréductibles dans $\L$. 
+
+On veut maintenant déterminer à quel condition $\Pos\cong \JIrr(\IdL(\Pos,\lambda))$. Cela nécessite d'avoir une bijection entre les deux, donnée par $x\mapsto \lambda([\le x])$. On veut donc savoir quand est-ce que les $\lambda([\le x])$ sont tous distincts et \emph{join}-irréductibles dans $\IdL(\Pos, \lambda)$.
+
 \begin{lem}
-   Soit $x<y$ dans $\Pos$ tel que $\lambda(x)=\lambda(y)$. Il existe $z\in \Pos$ tel que $\lambda([\le z])=\lambda([\le y])$, ou alors $\lambda([\le y])$ n'est pas \emph{join}-irréductible dans $\IdL(\Pos,\lambda)$.
+   \label{lem:comparable_elem}
+   Soit $x<y$ dans $\Pos$ tel que $\lambda(x)=\lambda(y)$. Il existe $z<y$ tel que $\lambda([\le z])=\lambda([\le y])$, ou alors $\lambda([\le y])$ n'est pas \emph{join}-irréductible dans $\IdL(\Pos,\lambda)$.
 \end{lem}
 \begin{proof}
    Si $x<y$ dans $\Pos$ avec $\lambda(x)=\lambda(y)$, alors $\lambda([< y])=\lambda([\le y])$. D'après la Proposition \ref{prop:2}, il existe un idéal principal $[\le z]$ strictement inclus dans $[\le y]$ tel que $\lambda([\le z])=\lambda([\le y])$, ou alors $\lambda([\le y])$ ne serait pas \emph{join}-irréductible.
 \end{proof}
 
-Tout treillis \emph{join}-distributif $\L$ peut s'obtenir à partir d'un poset étiqueté avec autant d'éléments qu'il y a de \emph{join}-irréductibles dans $\L$. À quel condition un poset étiqueté $(\Pos,\lambda)$ est de cette forme ? Autrement dit, on veut que les $\lambda([\le x])$ soit tous distincts et \emph{join}-irréductibles dans $\IdL(\Pos, \lambda)$.
 
+\begin{prop}
+  Soit $(\Pos,\lambda)$ un poset étiqueté fini. Les éléments \emph{join}-irréductibles de $\IdL(\Pos,\lambda)$ sont en bijection avec les éléments de $\Pos$ si et seulement si :
+  \begin{equation}
+  \label{eq:criterion}
+    \forall x,y\in \Pos, [x\neq y\text{ et } \lambda(x)=\lambda(y)] \implies \lambda([\le x])\nsubseteq\lambda([\le y]).
+  \end{equation}
+\end{prop}
+\begin{proof}
+  On montre d'abord ($\implies $) par contraposée. Supposons qu'il existe $x\neq y$ tels que $\lambda(x)=\lambda(y)$ et $\lambda([\le x])\subseteq \lambda([\le y])$.
+  Si $\lambda([\le x])=\lambda([\le y])$, l'application $x\mapsto \lambda([\le x])$ n'est pas injective.
+  Si $\lambda([\le x])$ est strictement inclus dans $\lambda([\le y])$, il existe $k\in \lambda(\Pos)$ différent de $\lambda(x)$ et $\lambda(y)$ tel que $\lambda([\le y])\setminus\{k\}\lessdot \lambda([\le y])$ dans $\IdL(\Pos,\lambda)$. Dans ce cas là :
+  \begin{itemize}
+  \item[$\bullet$] soit il existe $z<y$ avec $\lambda(z)=\lambda(y)$ et alors $x\mapsto \lambda([\le x])$ n'est pas injectif par le Lemme~\ref*{lem:comparable_elem} ;
+  \item[$\bullet$] soit $\lambda([\le y])\setminus\{\lambda(y)\}\lessdot \lambda([\le y])$ dans $\IdL(\Pos,\lambda)$, ainsi $\lambda([\le y])$ n'est pas \emph{join}-irréductible.
+  \end{itemize}
+  
+ On montre maintenant ($\Longleftarrow$) par l'absurde. On suppose que (\ref{eq:criterion}) est vérifié mais qu'il existe $x\neq y$ tels que $\lambda([\le x])=\lambda([\le y])$, ou alors que $\lambda([\le x])$ n'est pas \emph{join}-irréductible. 
+ \begin{itemize}
+ \item[$\bullet$]   Si $\lambda([\le x])=\lambda([\le y])$, alors $\lambda(x)\neq \lambda(y)$ par (\ref{eq:criterion}). Il doit donc exister $z<y$ tel que $\lambda(z)=\lambda(x)$ et $\lambda([\le z])\subseteq\lambda([\le x])$, ce qui contredit (\ref{eq:criterion}).
+ \item[$\bullet$] Si $\lambda([\le x])$ n'est pas \emph{join}-irréductible, il a au moins deux couvertures basses $\lambda([\le x])\setminus \{\lambda(x)\}$ et $\lambda([\le x])\setminus \{k\}$ avec $k\in \Pos$ différent de $\lambda(x)$. Soit $I\in \IdL(\Pos)$ tel que $\lambda(I)=\lambda([\le x])\setminus \{k\}$. Il existe $z\in I$ tel que $\lambda(z)=\lambda(x)$, et $\lambda([\le z])\subset \lambda(I) \subsetneq \lambda([\le x])$, ce qui contredit (\ref{eq:criterion}). \qedhere
+ \end{itemize}
+ 
+ \end{proof}
+ 
+  La bijection entre $\Pos$ et $\JIrr(\IdL(\Pos,\lambda))$ donnée par $x\mapsto \lambda([\le x])$ n'est pas nécessairement un isomorphisme (\emph{cf.} Figure \ref{fig:counterexample1}).
+\begin{cor}
+  Soit $(\Pos,\lambda)$ un poset étiqueté fini. Les posets $\JIrr(\IdL(\Pos,\lambda))$ et $\Pos$ sont isomorphes si et seulement si :
+    \begin{equation}
+    \label{eq:criterion2}
+      \forall x,y\in \Pos, [x\neq y \text{ et } \lambda([\le x])\subseteq\lambda([\le y]) ]\implies [x\le y \text{ et } \lambda(x)\neq \lambda(y)].
+    \end{equation}
+\end{cor}
+\begin{proof}
+   Comme $x\le y\implies \lambda([\le x])\subseteq \lambda([\le y])$, on a un isomorphisme entre $\JIrr(\IdL(\Pos,\lambda))$ et $\Pos$ si le critère \ref{eq:criterion} est vérifié et $\lambda([\le x])\subseteq \lambda([\le y]) \implies x\le y$.
+\end{proof}
+  
+  \begin{figure}
+  \centering
+  \includegraphics[width=0.7\linewidth]{figures/counter_example1}
+  \caption{Un poset étiqueté $(\Pos,\lambda)$ et le treillis $\IdL(\Pos,\lambda)$. Les éléments de $\Pos$ sont en bijection avec $\JIrr(\IdL(\Pos,\lambda))$ mais ces posets ne sont pas isormorphes.}
+  \label{fig:counterexample1}
+  \end{figure}
+  
 
 \subsection{Complétion}
 
