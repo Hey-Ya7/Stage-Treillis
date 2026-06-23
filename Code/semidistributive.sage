@@ -1,6 +1,26 @@
 # L = meet-semidistributive lattice
 def JoinKappa(L, j):
-    # we suppose that L is meet-semidistributive
+    r"""
+    Return the kappa map of some join-irreducible element of a lattice.
+
+    The lattice is assumed to be finite and meet-semidistributive. The kappa map of a join-irreducible element j is always 
+    well-defined in this case and gives the unique maximal element among those above the lower cover of j but not above j.
+
+    INPUT:
+
+    - ``L`` -- lattice; assumed to be finite and meet-semidistributive
+    - ``j`` -- an element of the lattice; assumed to be join-irreducible
+
+    OUTPUT:
+
+    The image of j by the kappa map. Raises an error if j is not join-irreducible. If L is not meet-semidistributive, an
+    arbitrary maximal element (which may not be unique) is returned. The returned element is guaranteed to be meet-irreducible
+    even if L is not meet-semidistributive.
+
+    EXAMPLES:
+
+
+    """
     assert j in L.join_irreducibles()
     js = L.lower_covers(j)[0]
     while true:
@@ -29,7 +49,7 @@ def SDLGraph(L):
 
 
 # G = directed graph, X = subset of G
-def right_orthogonal(G, X):
+def right_orthogonal(G, X) :
     S = set(X)
     for x in X:
         for y in G.upper_covers(x):
@@ -109,6 +129,16 @@ def OPLattice(G, lattice=True):
 
 
 def SurEdges(G, loops=False):
+    r"""
+    Return the surjective edges of a DiGraph.
+
+    INPUT:
+
+    -- ``G`` - DiGraph
+    -- ``loops`` - boolean (default: ``False``); specifies whether the graph is cyclic
+
+    """
+
     E = []
     for x,y,_ in G.edges():
         if loops or x != y:
@@ -123,6 +153,16 @@ def SurEdges(G, loops=False):
 
 
 def InEdges(G, loops=False):
+    r"""
+    Return the injective edges of a DiGraph.
+
+    INPUT:
+
+    -- ``G`` - DiGraph
+    -- ``loops`` - boolean (default: ``False``); specifies whether the graph is cyclic
+
+    """
+
     E = []
     for x, y, _ in G.edges():
         if loops or x != y:
