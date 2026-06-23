@@ -85,7 +85,7 @@ Citer \cite{AFN22} \cite{Czed14} \cite{Arm09}
    \begin{enumerate}
    \item \label{item:1} Tout intervalle atomique de $\L$ est booléen ;
    \item \label{item:2} Tout élément de $\L$ s'écrit de manière unique comme le \emph{meet} d'une antichaîne d'éléments \emph{meet}-irréductibles ;
-   \item \label{item:3} $\L$ est semimodulaire supérieur et \emph{meet}-semidistributif ;
+   \item \label{item:3} $\L$ est semimodulaire supérieurement et \emph{meet}-semidistributif ;
    \item \label{item:4} toutes les chaînes maximales de $\L$ ont pour longueur $|\MIrr(\L)|$ ;
    \item \label{item:5} $\L$ est un \emph{join}-sous-semitreillis d'un treillis distributif fini ;
    \item \label{item:6} $\L$ est isomorphe au treillis des fermés d'une clôture d'antiéchange (ou antimatroïde, ou géométrie convexe).
@@ -239,18 +239,25 @@ On veut maintenant déterminer à quel condition $\Pos\cong \JIrr(\IdL(\Pos,\lam
 \section{Nouvelle famille de treillis (nom ?)}
 Englobe les treillis \emph{join}-distributifs, géométriques, Kreweras...
 
-Lien avec les greedoïdes (par ex. tree-pruning greedoid)
+Lien avec les greedoïdes (voirpar ex. tree-pruning greedoid)
 
-\begin{thm}[\cite{BjZi92}, Théorème 9.8.7]
+\begin{thm}[{\cite[Théorème 8.8.7]{BjZi92}}]
 Un treillis fini $\L$ est semimodulaire supérieurement si et seulement si il est isomorphe au treillis des fermés d'un "interval greedoid".
-\end{thm} "interval greedoids"
+\end{thm} 
+
+Tous les greedoïdes ne donnent pas des treillis sympas, il faudrait peut-être trouver une définition plus restreinte ?
 
 Soit $\Pos$ un poset fini, $n\in \N$ et $\lambda:\Pos \to \Part(\{1,\dots, n\})$.
 
-A voir si cette def est pertinente
-\begin{defi}
-  Un treillis fini $\L$ est dit ... si pour tout $x,y,z\in \L$ tels que $y$ et $z$ couvrent $x$, l'intervalle $[y,y\vee z]$ est coatomique.
-\end{defi}
+A voir si cette def est pertinente :
+
+\begin{thm}
+   Soit $\L$ un treillis fini. Les assertions suivantes sont équivalentes :
+\begin{enumerate}
+\item   Pour tout $x,y,z\in \L$ tels que $y$ et $z$ couvrent $x$, l'intervalle $[y,y\vee z]$ est coatomique.
+\item Pour tout $x\in \L$, $\Lambda(x)=\Mu(x)$
+\end{enumerate}
+\end{thm}
 
 \section{Treillis \emph{join}-distributifs semi-infinis}
 
@@ -260,7 +267,7 @@ Treillis des multipartitions (Izumi Watanabe)
 
 Voir "An extension of Birkhoff's representation theorem to locally-finite distributive lattices" \cite{Worl26}
 
-Voir aussi \cite{AGT03}[Section 3]
+Voir aussi \cite[Section 3]{AGT03}
 
 \bibliography{lattices}{}
 \bibliographystyle{plain}
