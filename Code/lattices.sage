@@ -1,10 +1,10 @@
 # L = meet-semidistributive lattice
 def join_kappa(L, j):
     r"""
-    Return the kappa map of some join-irreducible element of a lattice.
+    Return the kappa map of the given join-irreducible element.
 
     The lattice is assumed to be finite and meet-semidistributive. The kappa map of a join-irreducible element j is always 
-    well-defined in this case and gives the unique maximal element among those above the lower cover of j but not above j.
+    well-defined in this case, and gives the unique maximal element among those above the lower cover of j but not above j.
 
     INPUT:
 
@@ -32,13 +32,13 @@ def join_kappa(L, j):
             js = L.upper_covers(js)[0]
 
 
-def irreducible_graph(L):
+def join_irreducible_graph(L):
     r"""
-    Return the graph of (join-) irreducible elements of a (meet-) semidistributive lattice.
+    Return the graph of join-irreducible elements of the lattice.
     
     INPUT:
 
-    - ``L`` -- lattice; assumed to be finite and (meet-) semidistributive
+    - ``L`` -- lattice; assumed to be finite and meet-semidistributive
 
     EXAMPLES:
 
@@ -46,7 +46,7 @@ def irreducible_graph(L):
 
     K = {}
     for i in L.join_irreducibles():
-        K[i] = JoinKappa(L, i)
+        K[i] = join_kappa(L, i)
     return DiGraph({i: [j for j in K if not L.is_lequal(i, K[j])] for i in K})
 
 
@@ -69,7 +69,7 @@ def right_orthogonal(G, X):
 
     S = set(X)
     for x in X:
-        for y in G.upper_covers(x):
+        for y in G.neighbors_out(x):
             S.add(y)
     return [x for x in G if x not in S]
 
@@ -93,13 +93,10 @@ def left_orthogonal(G, X):
 
     S = set(X)
     for x in X:
-        for y in G.lower_covers(x):
+        for y in G.neighbors_out(x):
             S.add(y)
     return [x for x in G if x not in S]
 
-
-# def MOPLattice(G):
-#    return LatticePoset(([s for s in Subsets(G) if Set(left_orthogonal(G,right_orthogonal(G,s))) == s],lambda p,q:p.issubset(q)))
 
 # plus performant
 def MOPLattice(G, lattice=True):
