@@ -32,7 +32,7 @@ def join_kappa(L, j):
             js = L.upper_covers(js)[0]
 
 
-def irreducible_graph(L):
+def join_irreducible_graph(L):
     r"""
     Return the graph of (join-) irreducible elements of a (meet-) semidistributive lattice.
     
@@ -46,7 +46,7 @@ def irreducible_graph(L):
 
     K = {}
     for i in L.join_irreducibles():
-        K[i] = JoinKappa(L, i)
+        K[i] = join_kappa(L, i)
     return DiGraph({i: [j for j in K if not L.is_lequal(i, K[j])] for i in K})
 
 
@@ -69,7 +69,7 @@ def right_orthogonal(G, X):
 
     S = set(X)
     for x in X:
-        for y in G.upper_covers(x):
+        for y in G.neighbors_out(x):
             S.add(y)
     return [x for x in G if x not in S]
 
@@ -93,7 +93,7 @@ def left_orthogonal(G, X):
 
     S = set(X)
     for x in X:
-        for y in G.lower_covers(x):
+        for y in G.neighbors_in(x):
             S.add(y)
     return [x for x in G if x not in S]
 
