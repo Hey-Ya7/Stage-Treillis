@@ -68,10 +68,11 @@ def right_orthogonal(G, X):
     """
 
     S = set(X)
-    for x in X:
-        for y in G.neighbors_out(x):
-            S.add(y)
-    return [x for x in G if x not in S]
+    l = []
+    for x in G:
+        if x not in S and all(y not in S for y in G.neighbors_in(x)):
+            l.append(x)
+    return l
 
 
 def left_orthogonal(G, X):
@@ -92,10 +93,11 @@ def left_orthogonal(G, X):
     """
 
     S = set(X)
-    for x in X:
-        for y in G.neighbors_in(x):
-            S.add(y)
-    return [x for x in G if x not in S]
+    l = []
+    for x in G:
+        if x not in S and all(y not in S for y in G.neighbors_out(x)):
+            l.append(x)
+    return l
 
 
 # def MOPLattice(G):

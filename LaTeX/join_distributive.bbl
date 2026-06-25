@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+
+\bibitem{AFN22}
+Kira Adaricheva, Ralph Freese, and James~B. Nation.
+\newblock Notes on join semidistributive lattices.
+\newblock {\em International Journal of Algebra and Computation},
+  32(02):347–356, February 2022.
+
+\bibitem{AGT03}
+K.V. Adaricheva, V.A. Gorbunov, and V.I. Tumanov.
+\newblock Join-semidistributive lattices and convex geometries.
+\newblock {\em Advances in Mathematics}, 173(1):1–49, January 2003.
+
+\bibitem{Arm09}
+Drew Armstrong.
+\newblock The sorting order on a {C}oxeter group.
+\newblock {\em Journal of Combinatorial Theory, Series A}, 116(8):1285--1305,
+  2009.
+
+\bibitem{BjZi92}
+Anders Bj\"{o}rner and G\"{u}nter~M. Ziegler.
+\newblock {\em Introduction to Greedoids}, page 284–357.
+\newblock Cambridge University Press, March 1992.
+
+\bibitem{Czed14}
+Gábor Czédli.
+\newblock Coordinatization of finite join-distributive lattices.
+\newblock {\em Algebra universalis}, 71(4):385–404, April 2014.
+
+\bibitem{Stan12}
+Richard~P. Stanley.
+\newblock {\em Enumerative Combinatorics}, volume~1.
+\newblock Cambridge University Press, Cambridge, 2 edition, 2011.
+
+\bibitem{Worl26}
+Dale~R. Worley.
+\newblock An extension of {B}irkhoff's representation theorem to locally-finite
+  distributive lattices, 2026.
+
+\end{thebibliography}
