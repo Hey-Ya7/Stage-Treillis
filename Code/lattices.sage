@@ -93,7 +93,11 @@ def left_orthogonal(G, X):
 
     S = set(X)
     for x in X:
+<<<<<<< HEAD
         for y in G.neighbors_out(x):
+=======
+        for y in G.neighbors_in(x):
+>>>>>>> refs/remotes/origin/main
             S.add(y)
     return [x for x in G if x not in S]
 
