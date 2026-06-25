@@ -1,5 +1,5 @@
 # L = meet-semidistributive lattice
-def JoinKappa(L, j):
+def join_kappa(L, j):
     r"""
     Return the kappa map of some join-irreducible element of a lattice.
 
@@ -32,20 +32,9 @@ def JoinKappa(L, j):
             js = L.upper_covers(js)[0]
 
 
-def JoinKMap(L):
-    K = {}
-    for i in L.join_irreducibles():
-        # i2 = L.lower_covers(i)[0]
-        # k = L.join([j for j in L if L.meet(j, i) == i2])
-        # if L.meet(k, i) != i2:
-        #    raise Exception("L n'est pas meet-semidistributif")
-        K[i] = JoinKappa(L, i)
-    return K
-
-
-def SDLGraph(L):
+def irreducible_graph(L):
     r"""
-    Return the graph of irreducible elements of a semidistributive lattice.
+    Return the graph of (join-) irreducible elements of a (meet-) semidistributive lattice.
     
     INPUT:
 
@@ -55,11 +44,12 @@ def SDLGraph(L):
 
     """
 
-    K = JoinKMap(L)
+    K = {}
+    for i in L.join_irreducibles():
+        K[i] = JoinKappa(L, i)
     return DiGraph({i: [j for j in K if not L.is_lequal(i, K[j])] for i in K})
 
 
-# G = directed graph, X = subset of G
 def right_orthogonal(G, X):
     r"""
     Return the right orthogonal of some subgraph of a DiGraph.
@@ -171,9 +161,12 @@ def OPLattice(G, lattice=True):
     return S
 
 
-def SurEdges(G, loops=False):
+def surjective_edges(G, loops=False):
     r"""
     Return the surjective edges of a directed graph.
+
+    An edge between vertices x, y of G is surjective if, for all vertices z such that there exists
+    an edge between y and z, there exists an edge between x and z.
 
     INPUT:
 
@@ -195,9 +188,12 @@ def SurEdges(G, loops=False):
     return E
 
 
-def InEdges(G, loops=False):
+def injective_edges(G, loops=False):
     r"""
     Return the injective edges of a directed graph.
+
+    An edge between vertices y, z of G is surjective if, for all vertices x such that there exists
+    an edge between x and y, there exists an edge between x and z.
 
     INPUT:
 
@@ -207,35 +203,16 @@ def InEdges(G, loops=False):
     """
 
     E = []
-    for x, y, _ in G.edges():
-        if loops or x != y:
+    for y, z, _ in G.edges():
+        if loops or y != z:
             s = True
-            for z in G.neighbors_in(x):
-                if z != y and not G.has_edge(z, y):
+            for x in G.neighbors_in(y):
+                if x != y and not G.has_edge(x, z):
                     s = False
                     break
             if s:
-                E.append((x, y))
+                E.append((y, z))
     return E
-
-
-#expérimental, G = two-acyclic factorization system
-#def is_polytopal(G):
-#    for x,y,_ in G.edges():
-#        if x!=y:
-#            s = True
-#            for z in G.neighbors_out(y):
-#                if not G.has_edge(x,z):
-#                    s = False
-#                    break
-#            if s:
-#                for z in G.neighbors_in(x):
-#                    if not G.has_edge(z,y):
-#                        s = False
-#                        break
-#                if s:
-#                    return False
-#    return True
 
 
 #check if a DiGraph G is a two-acyclic factorization system
@@ -253,8 +230,8 @@ def is_TAFS(G):
 
     """
 
-    GS = DiGraph(SurEdges(G))
-    GI = DiGraph(InEdges(G))
+    GS = DiGraph(surjective_edges(G))
+    GI = DiGraph(injective_edges(G))
     Mult = set((x,y) for x,y,_ in GI.edges())
     for x,y,_ in GS.edges():
         Mult.add((x,y))
@@ -280,8 +257,8 @@ def is_TAFS(G):
 
 
 def DrawTAFS(G, size=15):
-    S = SurEdges(G)
-    I = InEdges(G)
+    S = surjective_edges(G)
+    I = injective_edges(G)
     colI, colS, colIS, col = 'red','blue','black','green'
     D = {colI:[], colS:[], colIS:[], col:[]}
     for e in G.edges():
@@ -321,7 +298,7 @@ def ForcingOrder(G):
     G = DiGraph(G, loops=True)
     for x in G:
         G.add_edge(x, x)
-    S, I = SurEdges(G, True), InEdges(G, True)
+    S, I = surjective_edges(G, True), injective_edges(G, True)
     GS, GI = DiGraph(S, loops=True), DiGraph(I, loops=True)
     PS, PI = Poset((G, lambda x, y: (x, y) in S)), Poset((G, lambda x, y: (x,y) in I))
     E = []
@@ -348,30 +325,41 @@ def Cov(G,X,PI = None,PS = None):
     if PI==None:
         PI = DiGraph()
         PI.add_vertices(G)
-        PI.add_edges(InEdges(G))
+        PI.add_edges(injective_edges(G))
         PI = Poset(PI)
     if PS==None:
         PS = DiGraph()
         PS.add_vertices(G)
-        PS.add_edges(SurEdges(G))
+        PS.add_edges(surjective_edges(G))
         PS = Poset(PS)
     return PS.subposet(PI.subposet(X).minimal_elements()).minimal_elements()
 
 
 def JoinRepresentations(L):
-    G = SDLGraph(L)
+    G = irreducible_graph(L)
     PI = DiGraph()
     PI.add_vertices(G)
-    PI.add_edges(InEdges(G))
+    PI.add_edges(injective_edges(G))
     PI = Poset(PI)
     PS = DiGraph()
     PS.add_vertices(G)
-    PS.add_edges(SurEdges(G))
+    PS.add_edges(surjective_edges(G))
     PS = Poset(PS)
     return {x:Cov(G,[j for j in G if L.is_lequal(j,x)],PI,PS) for x in L}
 
 
-def SD_Rowmotion(L,lengths = False):
+def SD_rowmotion(L, lengths=False):
+    r"""
+    Return the Rowmotion operator applied to L.
+
+    INPUT:
+
+    -- ``L`` - lattice;
+
+    EXAMPLES:
+
+    """
+
     J = JoinRepresentations(L)
     K = JoinKMap(L)
     A,C = list(L),[]
@@ -394,16 +382,17 @@ def SD_Rowmotion(L,lengths = False):
         return sum(L[k] for k in L),{k:L[k] for k in sorted(L)}
     return C
 
-def Factorization(G):
+
+def factorization(G):
     if not is_TAFS(G):
         raise Exception('G is not a two-acyclic factorization system')
     GI,GS = {},{}
-    for x,y in InEdges(G):
+    for x,y in injective_edges(G):
         if x in GI:
             GI[x].append(y)
         else:
             GI[x] = [y]
-    for x,y in SurEdges(G):
+    for x,y in surjective_edges(G):
         if x in GS:
             GS[x].append(y)
         else:
