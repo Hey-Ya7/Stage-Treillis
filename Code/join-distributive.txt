@@ -1,0 +1,99 @@
+##### SORTING ORDERS #####
+
+#par exemple W = WeylGroup(['A', 3],prefix = 's')
+#par ex. w = [1,3,2,1,2]
+#x = élément de W
+def SortingSubword(W,w,x):
+    s,y = [],x
+    for i,k in enumerate(w):
+        if y.has_left_descent(k):
+            s.append(i)
+            y = y.apply_simple_reflection_left(k)
+    return s
+
+# prendre w un mot réduit pour W.w0 pour avoir un treillis sur W tout entier
+def SortingOrder(W,w):
+    return LatticePoset(([Set(SortingSubword(W,w,x)) for x in W],lambda p,q:p.issubset(q)))
+
+# des mots réduits égaux à commutation près donne le même treillis,
+# d'où l'interêt de regarder les classes de commutation
+def CommutationClasses(W):
+    G = W.coxeter_diagram()
+    return [w for w in W.w0.reduced_words() if all(w[i-1]<w[i] or G.has_edge(w[i-1],w[i]) for i in range(1,len(w)))]
+
+def SortingOrder_labelling(W, w):
+    L = SortingOrder(W,w)
+    P = L.join_irreducibles_poset()
+    def relabel(x):
+        s = Set()
+        for y in P.lower_covers(x):
+            s = s.union(y)
+        for k in x:
+            if k not in s:
+                return k
+    return P.relabel(lambda x: (relabel(x), x))
+"""
+# needs 'Rhombus tilings lattice.sage'
+n = 6
+T = StandardTableaux(list(range(n-1,0,-1))).random_element()
+w = StandardTableau_to_ReducedWord(T)
+w.draw(size = 20)
+W = WeylGroup(['A',n-1],prefix = 's')
+P = SortingOrder_labelling(W, w.main)
+"""
+
+
+######################
+
+def JoinDis_Low(P, L):
+    """
+    L = étiquettage poset P
+    """
+    return LatticePoset(([Set([L[i] for i in I]) for I in P.order_ideals_lattice()], lambda p,q:p.issubset(q)))
+
+def Random_labelling(P, n):
+    return {k: randint(1,n) for k in P}
+
+def Random_joindis_lattice(n, k, p = 0.3):
+    P = posets.RandomPoset(n, p)
+    L = Random_labelling(P, k)
+    return P.relabel(lambda k:(k, L[k])), JoinDis_Low(P, L)
+
+# ne renvoie pas exactement le poset des join-irréductibles, à corriger
+def AntiPart_to_JoinIrrPoset(P, L):
+    """
+    L = partition du poset P en antichaines (ou étiquetage quelconque en fait)
+    """
+    D = {k:i for i,l in enumerate(L) for k in l}
+    return Poset(([Set([D[i] for i in P.order_ideal([k])]) for k in P], lambda p,q:p.issubset(q)))
+
+# renvoie le poset des meet-irréductibles de Low(P, lambda)
+def MeetIrreduciblesPoset(P,L):
+    """
+    L = partition du poset P en antichaines
+    """
+    return Poset((range(len(L)),lambda p,q:all(any(P.is_lequal(x,y) for x in L[p]) for y in L[q])))
+
+def JoinIrr_labelling(L):
+    maxs = {}
+    for j in L.join_irreducibles_poset():
+        M = []
+        l = [L.lower_covers(j)[0]]
+        while l != []:
+            l2 = []
+            for x in l:
+                m = True
+                for y in L.upper_covers(x):
+                    if not L.is_lequal(j, y):
+                        l2.append(y)
+                        m = False
+                if m:
+                    M.append(x)
+            l = l2
+        maxs[j] = Set(M)
+    return L.join_irreducibles_poset().relabel(lambda x: (x, maxs[x]))
+
+        
+"""
+L2 = LatticePoset(([Set(Lambda_map(L, x)) for x in L], lambda p,q:p.issubset(q)))
+"""
