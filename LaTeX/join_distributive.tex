@@ -63,7 +63,7 @@
 \newcommand{\Dis}{\operatorname{Dis}}
 \newcommand{\Con}{\operatorname{Con}}
 \newcommand{\Dec}{\operatorname{Dec}}
-\newcommand{\Mu}{\operatorname{M}}
+\newcommand{\Kappa}{\operatorname{K}}
 
 \newcommand{\Part}{\operatorname{Part}}
 
@@ -133,41 +133,44 @@ L'application $\lambda :\IdL(\Pos)\to\IdL(\Pos, \lambda)$ est un morphisme de \e
 \subsection{Représentation des treillis \emph{join}-distributifs finis}
 \label{sec:repr_join_dis}
 
+$\kappa(j):=\max\{z\in \L:z\wedge j=j_*\}$ et $\gamma(j):=\{z\in \L:z\wedge j=j_*\}$
+
+$\L$ est \emph{meet}-semidistributif si et seulement si $\kappa(j)$ contient un seul élément pour tout $j\in \JIrr(\L)$.
 \begin{defi}
    Soit $\L$ un treillis fini. Pour tout $x\in \L$, on définit 
    \begin{equation}
-        \Lambda(x):=\bigcup_{j\in \JIrr(\L),j\le x}\max\{z\in \L:z\wedge j=j_*\},
+        \Kappa(x):=\bigcup_{j\in \JIrr(\L),j\le x}\kappa(j),
    \end{equation}
    \begin{equation}
-         \Mu(x):=\{m\in \MIrr(\L):x\nleq m\}.
+         \Gamma(x):=\bigcup_{j\in \JIrr(\L),j\le x}\gamma(j).
    \end{equation}
 \end{defi}
 
-Si $\L$ est \emph{meet}-semidistributif, on a $\Lambda(x)=\{\kappa(j):j\in \JIrr(\L), j\le x\}$
+$\Gamma(x):=\{m\in \MIrr(\L):x\nleq m\}$
 \begin{prop}
 Soit $\L$ un treillis fini. Pour tout $x\in \L$, on a
   \begin{align}
     \label{eq:lambda_mu1}
-      x & = \bigwedge \{m\in \MIrr(\L)\setminus \Mu(x)\} \\
+      x & = \bigwedge \{m\in \MIrr(\L)\setminus \Gamma(x)\} \\
       \label{eq:lambda_mu2}
-      & = \min \big( \L\setminus \bigcup_{m\in \Mu(x)} [\le m] \big)\\
+      & = \min \big( \L\setminus \bigcup_{m\in \Gamma(x)} [\le m] \big)\\
       \label{eq:lambda_mu3}
-      & = \min \big( \L\setminus \bigcup_{m\in \Lambda(x)} [\le m] \big).
+      & = \min \big( \L\setminus \bigcup_{m\in \Kappa(x)} [\le m] \big).
   \end{align}
 \end{prop}
 \begin{proof}
-L'égalité \eqref{eq:lambda_mu1} provient du fait que tout élément d'un treillis s'écrit comme le \emph{meet} des éléments \emph{meet}-irréductibles au dessus de lui. Pour tout $y\in \L$ tel que $x\nleq y$, il existe $m\in \MIrr(\L)$ tel que $y\le m$ et $x\nleq m$, ainsi $\L\setminus \bigcup_{m\in \Mu(x)} [\le m]$ a un seul élément minimal qui est $x$, d'où \eqref{eq:lambda_mu2}. Pour démontrer \eqref{eq:lambda_mu3}, on montre que tout \emph{meet}-irréductible $m$ maximal dans $\Mu(x)$ est dans $\Lambda(x)$. Par maximalité de $m$, on a $x\le m^*$. Comme $x\nleq m$, il existe $j\in \JIrr(\L)$ tel que $j\le x$ et $j\nleq m$. Soit $j$ minimal avec cette propriété, on a alors $j_*\le m$. Ainsi $m\wedge j=j_*$, et $m$ est maximal avec cette propriété, donc $m\in \Lambda(x)$.
+L'égalité \eqref{eq:lambda_mu1} provient du fait que tout élément d'un treillis s'écrit comme le \emph{meet} des éléments \emph{meet}-irréductibles au dessus de lui. Pour tout $y\in \L$ tel que $x\nleq y$, il existe $m\in \MIrr(\L)$ tel que $y\le m$ et $x\nleq m$, ainsi $\L\setminus \bigcup_{m\in \Gamma(x)} [\le m]$ a un seul élément minimal qui est $x$, d'où \eqref{eq:lambda_mu2}. Pour démontrer \eqref{eq:lambda_mu3}, on montre que tout \emph{meet}-irréductible $m$ maximal dans $\Gamma(x)$ est dans $\Kappa(x)$. Par maximalité de $m$, on a $x\le m^*$. Comme $x\nleq m$, il existe $j\in \JIrr(\L)$ tel que $j\le x$ et $j\nleq m$. Soit $j$ minimal avec cette propriété, on a alors $j_*\le m$. Ainsi $m\wedge j=j_*$, et $m$ est maximal avec cette propriété, donc $m\in \Kappa(x)$.
 \end{proof}
 
 \begin{cor}
    Soit $\L$ un treillis fini. Pour tous $x,y\in \L$, on a 
    \begin{equation}
-       x\le y \iff \Lambda(x)\subseteq \Lambda(y) \iff \Mu(x) \subseteq \Mu(y).
+       x\le y \iff \Kappa(x)\subseteq \Kappa(y) \iff \Gamma(x) \subseteq \Gamma(y).
    \end{equation}
 \end{cor}
 
-\begin{prop}
-  Soit $\L$ un treillis \emph{join}-distributif fini. $\L$ est isomorphe à $\IdL(\JIrr(\L),\kappa)$.
+\begin{prop}[\cite{HaNo18}, Théorème 2]
+  Soit $\L$ un treillis fini. $\L$ est isomorphe à $\IdL(\JIrr(\L),\gamma)$.
 \end{prop}
 
 \subsection{Étiquetages minimaux}
@@ -254,10 +257,13 @@ A voir si cette def est pertinente :
 \begin{thm}
    Soit $\L$ un treillis fini. Les assertions suivantes sont équivalentes :
 \begin{enumerate}
-\item   Pour tout $x,y,z\in \L$ tels que $y$ et $z$ couvrent $x$, l'intervalle $[y,y\vee z]$ est coatomique.
-\item Pour tout $x\in \L$, $\Lambda(x)=\Mu(x)$
+\item   Pour tout $x,y,z\in \L$ tels que $y$ et $z$ couvrent $x$, l'intervalle $[y,y\vee z]$ est coatomique ;
+\item Pour tout $j\in \JIrr(\L)$, $\kappa(j)=\gamma(j)$ ;
+\item Pour tout $x\in \L$, $\Kappa(x)=\Gamma(x)$.
 \end{enumerate}
 \end{thm}
+
+Appeler ça treillis \emph{join}-modulaire ? On aurait \emph{join}-modulaire + \emph{meet}-modulaire $\implies$ modulaire, mais la réciproque n'est pas vraie (contre-exemple de taille 9)
 
 \section{Treillis \emph{join}-distributifs semi-infinis}
 
