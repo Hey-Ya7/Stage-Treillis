@@ -107,29 +107,9 @@ def gamma_equals_kappa(L):
     kappa = kappa_map(L)
     return all(gamma[j] == kappa[j] for j in gamma)
 
-def beta_map(L):
-    beta = {}
-    for j in L.join_irreducibles_poset():
-        M = []
-        l = [L.lower_covers(j)[0]]
-        while l != []:
-            l2 = []
-            for x in l:
-                for y in L.upper_covers(x):
-                    if not L.is_lequal(j, y):
-                        M.append(y)
-                        l2.append(y)
-            l = l2
-        beta[j] = Set(M)
-    return beta
-
-def beta_equals_gamma(L):
-    gamma = gamma_map(L)
-    beta = beta_map(L)
-    return all(gamma[j] == beta[j] for j in gamma)
 
 """
-Treillis tels que Lambda = Mu
+Treillis tels que gamma = kappa
 Contient les treillis semimodulaires supérieurement, en particulier les treillis join-distributifs et les treillis géométriques
 			1	1	2	4	9	21	56	158
 join-distributif <==>
