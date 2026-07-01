@@ -1,7 +1,6 @@
-# L = meet-semidistributive lattice
 def join_kappa(L, j):
     r"""
-    Return the kappa map of the given join-irreducible element.
+    Return the kappa map of the join-irreducible element j.
 
     The lattice is assumed to be finite and meet-semidistributive. The kappa map of a join-irreducible element j is always 
     well-defined in this case, and gives the unique maximal element among those above the lower cover of j but not above j.
@@ -93,11 +92,7 @@ def left_orthogonal(G, X):
 
     S = set(X)
     for x in X:
-<<<<<<< HEAD
-        for y in G.neighbors_out(x):
-=======
         for y in G.neighbors_in(x):
->>>>>>> refs/remotes/origin/main
             S.add(y)
     return [x for x in G if x not in S]
 
