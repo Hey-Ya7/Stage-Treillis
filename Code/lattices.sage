@@ -1,10 +1,15 @@
-# L = meet-semidistributive lattice
-def join_kappa(L, j):
-    r"""
-    Return the kappa map of some join-irreducible element of a lattice.
+# note : part of this code was integrated (locally) to the sage library, at 
+# sage/combinat/posets/lattices.py. For this reason, join_kappa and
+# meet_dual_kappa were rewritten to be class methods of FiniteLatticePoset.
 
-    The lattice is assumed to be finite and meet-semidistributive. The kappa map of a join-irreducible element j is always 
-    well-defined in this case and gives the unique maximal element among those above the lower cover of j but not above j.
+def join_kappa(self, j):
+    r"""
+    Return the kappa map of the join-irreducible element j.
+
+    The lattice is assumed to be finite and meet-semidistributive.
+    The kappa map of a join-irreducible element j is always well-defined 
+    in this case, and gives the unique maximal element among those above 
+    the lower cover of j but not above j.
 
     INPUT:
 
@@ -13,32 +18,160 @@ def join_kappa(L, j):
 
     OUTPUT:
 
-    The image of j by the kappa map. Raises an error if j is not join-irreducible. If L is not meet-semidistributive, an
-    arbitrary maximal element (which may not be unique) is returned. The returned element is guaranteed to be meet-irreducible
-    even if L is not meet-semidistributive.
+    The image of j by the kappa map. Raises an error if j is not join-
+    irreducible. If L is not meet-semidistributive, an arbitrary maximal element
+    (which may not be unique) is returned. The returned element is guaranteed to 
+    be meet-irreducible even if L is not meet-semidistributive.
 
     EXAMPLES:
 
+    On a meet-semidistributive lattice, the kappa map is always well defined 
+    as a map from the join-irreducibles to the meet-irreducibles::
+
+        sage: T4 = posets.TamariLattice(4)
+        sage: j = T4.join_irreducibles()[0]
+        sage: T4.join_kappa(j)
+        (1, 1, 1, 0, 1, 0, 0, 0, 0)
+        sage: T4.join_kappa(j) in T4.meet_irreducibles()
+        True
+    
+    On elements that are not join-irreducible, the kappa map is ill-defined and
+    an error is raised::
+
+        sage: T4 = posets.TamariLattice(4)
+        sage: e = T4[6]
+        sage: T4.join_kappa(e)
+        Traceback (most recent call last):
+        ...
+        ValueError: element is not join-irreducible
+
+    If the lattice is not meet-semidistributive, an element is still returned. 
+    This element is guaranteed to be above the lower cover of j but not j.
+    Furthermore, it is also guaranteed to be meet-irreducible and maximal among 
+    elements above the lower cover of j but not j::
+
+        sage: L = posets.DiamondPoset(5)
+        sage: L.join_kappa(2)
+        1
+        sage: L.is_lequal(0, 1) and not L.is_lequal(2, 1)
+        True
+        sage: 1 in L.meet_irreducibles()
+        True
+    
+    However, if the lattice is not meet-semidistributive, the returned element 
+    need not be the only maximal element among those above the lower cover of j 
+    but not j. This can be seen in the previous example::
+        
+        sage: L = posets.DiamondPoset(5)
+        sage: L.is_lequal(0, 3) and not L.is_lequal(2, 3)
+        True
+        sage: 3 in L.meet_irreducibles()
+        True
+    """
+    # Algorithm: Starting from the lower cover of j, progressively move upwards
+    # while not going above j. This process necessarily terminates by finitude.
+    
+    if j not in self.join_irreducibles():
+        raise ValueError("element is not join-irreducible")
+    js = self.lower_covers(j)[0]
+    while True: # This loop will always terminate for a finite lattice.
+        if self.is_lequal(j, self.upper_covers(js)[0]):
+            if len(self.upper_covers(js)) == 1:
+                return js
+            js = self.upper_covers(js)[1]
+        else:
+            js = self.upper_covers(js)[0]
+
+
+def meet_dual_kappa(self, m):
+    r"""
+    Return the dual kappa map of the meet-irreducible element m.
+
+    The lattice is assumed to be finite and join-semidistributive. 
+    The dual kappa map of a meet-irreducible element m is always well-defined 
+    in this case, and gives the unique minimal element among those under 
+    the upper cover of j but not under j.
+
+    INPUT:
+
+    - ``L`` -- lattice; assumed to be finite and join-semidistributive
+    - ``m`` -- an element of the lattice; assumed to be meet-irreducible
+
+    OUTPUT:
+
+    The image of m by the dual kappa map. Raises an error if m is not meet-
+    irreducible. If L is not join-semidistributive, an arbitrary minimal element 
+    (which may not be unique) is returned. The returned element is guaranteed to 
+    be join-irreducible even if L is not join-semidistributive.
+
+    EXAMPLES:
+    
+    On a join-semidistributive lattice, the dual kappa map is always well defined 
+    as a map from the meet-irreducibles to the join-irreducibles::
+
+        sage: T4 = posets.TamariLattice(4)
+        sage: m = T4.meet_irreducibles()[0]
+        sage: T4.meet_dual_kappa(m)
+        (1, 1, 0, 0, 1, 0, 1, 0, 0)
+        sage: T4.meet_dual_kappa(m) in T4.join_irreducibles()
+        True
+    
+    On elements that are not meet-irreducible, the dual kappa map is ill-defined,
+    an error is raised::
+
+        sage: T4 = posets.TamariLattice(4)
+        sage: e = T4[5]
+        sage: T4.meet_dual_kappa(e)
+        Traceback (most recent call last):
+        ...
+        ValueError: element is not meet-irreducible
+
+    If the lattice is not join-semidistributive, an element is still returned. 
+    This element is guaranteed to be below the upper cover of m but not m.
+    Furthermore, it is also guaranteed to be join-irreducible and minimal among 
+    elements below the upper cover of m but not m::
+
+        sage: L = posets.DiamondPoset(5)
+        sage: L.meet_dual_kappa(2)
+        1
+        sage: L.is_lequal(1, 4) and not L.is_lequal(1, 2)
+        True
+        sage: 1 in L.join_irreducibles()
+        True
+    
+    However, if the lattice is not join-semidistributive, the returned element 
+    need not be the only minimal element among those below the upper cover of m 
+    but not m. This can be seen in the previous example::
+        
+        sage: L = posets.DiamondPoset(5)
+        sage: L.is_lequal(3, 4) and not L.is_lequal(3, 2)
+        True
+        sage: 3 in L.join_irreducibles()
+        True
 
     """
-    assert j in L.join_irreducibles()
-    js = L.lower_covers(j)[0]
-    while true:
-        if L.is_lequal(j, L.upper_covers(js)[0]):
-            if len(L.upper_covers(js)) == 1:
-                return js
-            js = L.upper_covers(js)[1]
+    # Algorithm: Starting from the upper cover of m, progressively move downwards
+    # while not going below m. This process necessarily terminates by finitude.
+
+    if m not in self.meet_irreducibles():
+        raise ValueError("element is not meet-irreducible")
+    ms = self.upper_covers(m)[0]
+    while True: # This loop will always terminate for a finite lattice.
+        if self.is_lequal(self.lower_covers(ms)[0], m):
+            if len(self.lower_covers(ms)) == 1:
+                return ms
+            ms = self.lower_covers(ms)[1]
         else:
-            js = L.upper_covers(js)[0]
+            ms = self.lower_covers(ms)[0]
 
 
 def join_irreducible_graph(L):
     r"""
-    Return the graph of (join-) irreducible elements of a (meet-) semidistributive lattice.
+    Return the graph of join-irreducible elements of the lattice.
     
     INPUT:
 
-    - ``L`` -- lattice; assumed to be finite and (meet-) semidistributive
+    - ``L`` -- lattice; assumed to be finite and meet-semidistributive
 
     EXAMPLES:
 
@@ -99,9 +232,6 @@ def left_orthogonal(G, X):
             l.append(x)
     return l
 
-
-# def MOPLattice(G):
-#    return LatticePoset(([s for s in Subsets(G) if Set(left_orthogonal(G,right_orthogonal(G,s))) == s],lambda p,q:p.issubset(q)))
 
 # plus performant
 def MOPLattice(G, lattice=True):
