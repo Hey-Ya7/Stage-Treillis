@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{graphicx} % Required for inserting images
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+\title{On the lattice of atomic/coatomic intervals}
+\author{Jian DAI}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+An interval $[x, y]$ of a finite lattice $L$ is said to be \textbf{atomic} if $y$ can be written as the join of upper covers of $x$. More precisely, $[x, y]$ is atomic if there exists a set $S \subset L$ such that $y = \bigvee (S \cup \{x\})$ and $x \lessdot s$ for all $s \in S$. In particular, taking $S = \emptyset$ gives the interval $[x, x]$. Moreover, if $S \ne \emptyset$, then $y = \bigvee S$. \\
+Similarly, the interval $[x, y]$ is said to be \textbf{coatomic} if $x$ can be written as the meet of lower covers of $y$, that is, there exists $S \subset L$ such that $x = \bigwedge (S \cup \{y\})$ and $s \lessdot y$ for all $s \in S$. Taking $S = \emptyset$ in this case gives the interval $[y, y]$. \\
+Given a lattice $L$, one may define an order relation on the set of its atomic (resp. coatomic) intervals as follows:
+$$[a,b] \le [c,d] \iff a \le c \wedge b \le d.$$
+This makes the atomic (resp. coatomic) intervals of $L$ into a partially ordered set. As we shall see, it is possible to further make this partially ordered set into a lattice, provided that $L$ is sufficiently well-behaved.
+
+\section{Defining meet and join}
+
+We begin by defining the following operation on the atomic intervals of $L$:
+$$[a, b] \wedge [c, d] =  [a \wedge c, \bigvee \{s \,|\, a \wedge c \lessdot s \wedge s \le b \wedge d \} \cup \{a \wedge c\}]$$
+We will hereby refer to this operation as the \textbf{atomic meet}. From the definition, it is clear that the atomic meet of two atomic intervals is an atomic interval. Furthermore, it is easy to see that the atomic meet of two intervals is a lower bound of the two. \\
+Less straightforward is the question of whether this operation defines a \textit{greatest} lower bound. This is not the case in general.
+
+\begin{lemma} Let $L$ be a finite lattice and $x,\, y \in L$. If $x < y$, there exists a lower cover $y_* \lessdot y$ such that $x \le y_*$.
+\end{lemma}
+\begin{proof}
+    Take $y_* = \bigvee_{x \le s < y} s$. Since $L$ (and therefore any subset of $L$) is finite, we have $x \le y_* < y$. Suppose that there exists $y_* < z < y$. Then $x \le z < y$ and therefore $z \le y_*$, a contradiction. Thus $y_* \lessdot y$.
+\end{proof}
+
+\begin{lemma} Likewise, if $x < y$, there exists an upper cover $x \lessdot x^*$ such that $x^* \le y$.
+\end{lemma}
+
+\begin{lemma} \label{Lemma 2.3} Let $x,\, y \in L$ and $x^*$ be an upper cover of $x$. If $x \le y$, then either $x^* \le y$ or $x^* \wedge y = x$.
+\end{lemma}
+\begin{proof}
+    Since $x \le x^*$ and $x \le y$, we have $x \le x^* \wedge y \le x^*$. Therefore either $x^* \wedge y = x^*$ (in which case $x^* \le y$) or $x^* \wedge y = x$.
+\end{proof}
+
+\begin{lemma} \label {Lemma 2.4} Suppose that $L$ is meet-semidistributive. Let $[a, b]$ be an atomic interval of $L$ with $a \ne b$ and $x,\, x^*$ such that $x \lessdot x^*$ and $[x, x^*] \le [a, b]$. Then there exists an upper cover $a^*$ of $a$ such that $a^* \le b$ and $x^* \le a^*$.
+\end{lemma}
+\begin{proof}
+    Write $b$ as $\bigvee S$ with $S$ a nonempty set of upper covers of $a$. Suppose, by way of contradiction, that $x^* \not \le s$ for all $s \in S$. Since $x \le a \le s$ for each $s$, by Lemma \ref{Lemma 2.3} we have $x^* \wedge s = x$ for all $s \in S$. By meet-semidistributivity, $(\bigvee S) \wedge x^* = x$. However $\bigvee S = b$ and $x^* \le b$, a contradiction as this implies $(\bigvee S) \wedge x^* = x^*$. Therefore there exists some $a^* \in S$ such that $x^* \le a^*$, and $a^* \le b$ since $b$ = $\bigvee S$, concluding the proof.
+\end{proof}
+
+\begin{theorem} If $L$ is meet-semidistributive, then the atomic meet on $L$ defines a greatest lower bound.
+\end{theorem}
+
+\begin{proof}
+    Let $[a, b],\, [c, d],\, [x, y]$ be atomic intervals with $[x, y] \le [a, b]$ and $[x, y] \le [c, d]$. We must verify that we then have $[x, y] \le [a, b] \wedge [c, d]$. \\
+    We need only show $y \le \bigvee \{s \,|\, a \wedge c \lessdot s \wedge s \le b \wedge d \} \cup \{a \wedge c\}$, as $x \le a \wedge c$ is obvious. Since the inequality is clearly true if $y \le a \wedge c$, we may also assume either $y \not \le a$ or $y \not \le c$. \\
+    Suppose then, without loss of generality, that $y \not \le a$. This also implies $x \ne y$. Write $y$ as $\bigvee S$ with $S$ a nonempty set of upper covers of $x$. We shall show that $x^* \le \bigvee \{s \,|\, a \wedge c \lessdot s \wedge s \le b \wedge d \}$ for all $x^* \in S$. For this it suffices to find, for each $x^* \in S$, some $s$ such that $a \wedge c \lessdot s$, $s \le b \wedge d$, and $x^* \le s$. \\
+    Let $x^* \in S$. Since $y \le b$, we have $a \ne b$. By Lemma \ref{Lemma 2.4}, there exists some upper cover $a^*$ of $a$ such that $a^* \le b$ and $x^* \le a^*$. Now consider $t = a^* \wedge d$. Since $x^* \le a^*$ and $x^* \le y \le d$, we have $x^* \le t$
+\end{proof}
+
+\end{document}
